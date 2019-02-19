@@ -61,10 +61,8 @@ for(let i = 0; i < productBtnList.length; i++){
             }
         }
         if (!(isNaN(qty) || qty === undefined || qty === 0)) {
-            console.log(price,' - ',qty);
             allPrice = allPrice + price*qty;
             allProduct = allProduct + qty;
-            console.log(allProduct,' = ',allPrice);
             document.querySelector('.top-cart-info__item').children[0].innerHTML = allProduct;
             document.querySelector('.top-cart-info__item').children[1].innerHTML = allPrice;
         }
@@ -74,20 +72,26 @@ for(let i = 0; i < productBtnList.length; i++){
 
 /*Modal Window*/
     document.querySelector('.btn-check').setAttribute('style','cursor:pointer');
-    document.querySelector('.btn-check').setAttribute('onclick','Modal()');
+    document.querySelector('.container .btn-check').setAttribute('onclick','Modal()');
     let modalWindow = document.createElement('div');
     modalWindow.className = 'modalWindow';
-    modalWindow.setAttribute('style','position:absolute; text-align:center; width:400px; margin-left:-150px; left:50%; top:-100%; padding:20px; border:1px solid #333; z-index:999; transition: all 1s ease-in 1s; background-color:red');
-    modalWindow.innerHTML = "<i onclick='closeModal()' style='display: block; float: right; padding: 10px; cursor: pointer;'>X</i><h1 style='clear: both'>Оформити заказ</h1><form><input type='text' class='userName' required placeholder='Ваше імя'><br><input type='email' class='userEmail' required placeholder='Ваш email'><br><input type='submit' class='sendOffer' onclick='sendModal()' placeholder='Відправити'></form>";
+    modalWindow.setAttribute('style','position:absolute; text-align:center; width:400px; margin-left:-150px; left:50%; top:-100%; padding:20px; border:1px solid #333; z-index:999; transition: all 0.5s ease 0.5s; background-color:lightgray');
+    modalWindow.innerHTML = "<i onclick='closeModal()' style='display: block; float: right; padding: 5px; cursor: pointer; position: absolute; right: 1px; top: 1px;'>X</i><h1>Оформити заказ</h1><form  style='clear: both'><input type='text' class='userName' style='margin: 10px; width: 255px; height: 25px' required placeholder='Ваше імя'><br><input type='email' class='userEmail' style='margin-bottom: 10px; width: 255px; height: 25px' required placeholder='Ваш email'><br><input type='submit' class='sendOffer btn-check' onclick='sendModal()' style='cursor: pointer' placeholder='Відправити'></form>";
     document.body.appendChild(modalWindow);
 
 function Modal() {
-    let height = modalWindow.offsetHeight;
-    modalWindow.style.marginTop = -height/2 + "px";
-    modalWindow.style.top = "50%";
+    if (document.querySelector('.top-cart-info__item').children[0].innerHTML == 0) {
+        alert("Товарів для замовлення немає!!!");
+    } else {
+        let height = modalWindow.offsetHeight;
+        modalWindow.style.marginTop = -height / 2 + "px";
+        modalWindow.style.top = "50%";
+    }
 }
 function closeModal() {
     modalWindow.style.top = "-100%";
+    document.querySelector('.userName').value = "";
+    document.querySelector('.userEmail').value = "";
 }
 
 function sendModal() {
@@ -98,14 +102,20 @@ function sendModal() {
         } else if(!validateEmail(userEmail.value.trim())){
             alert('Введіть коректний Email');
         } else{
-            alert('Дякуємо за замовлення! Вам перетелефонують на протязі 5хв.');
+            alert('Дякуємо за замовлення! Вам зателефонує менеджер на протязі 5хв.');
             userName.value = "";
             userEmail.value = "";
             closeModal();
+            allProduct = 0;
+            allPrice = 0;
+            document.querySelector('.top-cart-info__item').children[0].innerHTML = allProduct;
+            document.querySelector('.top-cart-info__item').children[1].innerHTML = allPrice;
         }
 }
+
 
 function validateEmail(email){
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
+        /*Modal Window END*/
